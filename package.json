@@ -1,0 +1,14 @@
+{
+  "name": "@luwenxull/quick-scene",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/luwenxull/quick-scene",
+  "author": "luwenxull <992273307@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "pub": "npm publish --access=public"
+  },
+  "dependencies": {
+    "three": "^0.94.0"
+  }
+}
