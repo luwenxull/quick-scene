@@ -12,23 +12,33 @@ const default_option = {
   },
   resize: {
     enabled: false,
+  },
+  raycast: {
+    enabled: false,
+    events: [],
   }
 }
 
 let onResize = null // resize callback
+const mouse = new THREE.Vector2() // mouse for raycast
+const rayCaster = new THREE.Raycaster() // raycaster
 
-function quickScene(container, option = {}) {
-  container.textContent = ''
-  const scene = new THREE.Scene()
-  const renderer = createRenderer(container)
-  const camera = createCamera(container, Object.assign({}, default_option.camera, option.camera || {}))
-  const control = enableTrackballControl(
-    container,
+let container // container
+let scene, camera, renderer, control
+
+function quickScene($container, option = {}) {
+  container = $container
+  $container.textContent = ''
+  scene = new THREE.Scene()
+  renderer = createRenderer($container)
+  camera = createCamera($container, Object.assign({}, default_option.camera, option.camera || {}))
+  control = enableTrackballControl(
+    $container,
     camera,
     Object.assign({}, default_option.trackballControl, option.trackballControl || {})
   )
-  enableResize(
-    container,
+  onResize = enableResize(
+    $container,
     camera,
     renderer,
     Object.assign({}, default_option.resize, option.resize || {})
@@ -73,7 +83,7 @@ function enableTrackballControl(container, camera, option) {
 function enableResize(container, camera, renderer, option) {
   if (option.enabled) {
     let resizeId
-    onResize = function() {
+    const onResize = function() {
       if (typeof resizeId === 'number') {
         clearTimeout(resizeId)
       }
@@ -85,7 +95,15 @@ function enableResize(container, camera, renderer, option) {
       }, 0)
     }
     window.addEventListener('resize', onResize)
+    return onResize
   }
+}
+
+function rayCast(x, y, container, camera, objects) {
+  mouse.x = (x / container.clientWidth) * 2 - 1
+  mouse.y = -(y / container.clientHeight) * 2 + 1
+  rayCaster.setFromCamera(mouse, camera)
+  return rayCaster.intersectObjects(objects)
 }
 
 /**
@@ -99,3 +117,4 @@ function destroy() {
 
 exports.quickScene = quickScene
 exports.destroy = destroy
+exports.rayCast = rayCast
