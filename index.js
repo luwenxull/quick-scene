@@ -1,5 +1,5 @@
 const THREE = require('three')
-const TrackballControl = require('./lib/TrackballControls')
+const { TrackballControls } = require('./lib/TrackballControls')
 
 const default_option = {
   camera: {
@@ -20,9 +20,9 @@ let onResize = null // resize callback
 function quickScene(container, option = {}) {
   container.textContent = ''
   const scene = new THREE.Scene()
-  const renderer = createRenderer()
+  const renderer = createRenderer(container)
   const camera = createCamera(container, Object.assign({}, default_option.camera, option.camera || {}))
-  enableTrackBallControl(
+  const control = enableTrackballControl(
     container,
     camera,
     Object.assign({}, default_option.trackballControl, option.trackballControl || {})
@@ -39,6 +39,7 @@ function quickScene(container, option = {}) {
     scene,
     renderer,
     camera,
+    control,
   }
 }
 
@@ -51,20 +52,21 @@ function createRenderer(container) {
 function createCamera(container, cameraOption) {
   const {clientWidth, clientHeight} = container
   const camera = new THREE.PerspectiveCamera(75, clientWidth / clientHeight, 0.1, 1000);
-  camera.position.set(cameraOption.position)
+  camera.position.set(...cameraOption.position)
   camera.lookAt(0, 0, 0)
   return camera
 }
 
-function enableTrackBallControl(container, camera, option) {
+function enableTrackballControl(container, camera, option) {
   if (option.enabled) {
-    const control = new TrackballControl(camera, container)
+    const control = new TrackballControls(camera, container)
     // this.control.noPan = true
     if (typeof option.onChange === 'function') {
       control.addEventListener('change', option.onChange)
     }
     control.maxDistance = option.maxDistance
     control.minDistance = option.minDistance
+    return control
   }
 }
 
