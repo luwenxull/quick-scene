@@ -23,11 +23,10 @@ let onResize = null // resize callback
 const mouse = new THREE.Vector2() // mouse for raycast
 const rayCaster = new THREE.Raycaster() // raycaster
 
-let container // container
+// let container // container
 let scene, camera, renderer, control
 
 function quickScene($container, option = {}) {
-  container = $container
   $container.textContent = ''
   scene = new THREE.Scene()
   renderer = createRenderer($container)
@@ -44,7 +43,7 @@ function quickScene($container, option = {}) {
     Object.assign({}, default_option.resize, option.resize || {})
   )
   renderer.render(scene, camera)
-  document.body.appendChild(renderer.domElement)
+  $container.appendChild(renderer.domElement)
   return {
     scene,
     renderer,
