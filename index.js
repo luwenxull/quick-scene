@@ -6,15 +6,15 @@ const default_option = {
     position: [100, 100, 100]
   },
   trackballControl: {
-    enabled: false,
+    enable: false,
     maxDistance: 400,
     minDistance: 100,
   },
   resize: {
-    enabled: false,
+    enable: false,
   },
   raycast: {
-    enabled: false,
+    enable: false,
     events: [],
   }
 }
@@ -23,10 +23,11 @@ let onResize = null // resize callback
 const mouse = new THREE.Vector2() // mouse for raycast
 const rayCaster = new THREE.Raycaster() // raycaster
 
-// let container // container
+let container // container
 let scene, camera, renderer, control
 
 function quickScene($container, option = {}) {
+  container = $container
   $container.textContent = ''
   scene = new THREE.Scene()
   renderer = createRenderer($container)
@@ -67,7 +68,7 @@ function createCamera(container, cameraOption) {
 }
 
 function enableTrackballControl(container, camera, option) {
-  if (option.enabled) {
+  if (option.enable) {
     const control = new TrackballControls(camera, container)
     // this.control.noPan = true
     if (typeof option.onChange === 'function') {
@@ -80,7 +81,7 @@ function enableTrackballControl(container, camera, option) {
 }
 
 function enableResize(container, camera, renderer, option) {
-  if (option.enabled) {
+  if (option.enable) {
     let resizeId
     const onResize = function() {
       if (typeof resizeId === 'number') {
@@ -98,7 +99,7 @@ function enableResize(container, camera, renderer, option) {
   }
 }
 
-function rayCast(x, y, container, camera, objects) {
+function rayCast(x, y, objects) {
   mouse.x = (x / container.clientWidth) * 2 - 1
   mouse.y = -(y / container.clientHeight) * 2 + 1
   rayCaster.setFromCamera(mouse, camera)
