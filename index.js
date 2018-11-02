@@ -15,10 +15,6 @@ const default_option = {
   resize: {
     enable: false,
   },
-  raycast: {
-    enable: false,
-    events: [],
-  }
 }
 
 function createRenderer(container) {
@@ -127,4 +123,4 @@ function quickScene($container, option = {}) {
   }
 }
 
-exports.quickScene = quickScene
+module.exports = quickScene
